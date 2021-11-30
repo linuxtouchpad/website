@@ -23,6 +23,6 @@ If you're a software engineer with experience in C, C++ or another systems langu
 
 ## Who are some of the key people?
 
-There are many generous people involved who've spent years making touchpad on the Linux possible. Today, there are a handful of <a href="{% link people.markdown %}">people</a> involved in maintaining and adding new features--Peter Hutterer, Bill Harding, Povilas Kanapickas, and José Exposito for example.
+There are many generous people involved who've spent years making touchpad on the Linux possible. Today, there are a handful of <a href="{% link community.markdown %}">people</a> involved in maintaining and adding new features--Peter Hutterer, Bill Harding, Povilas Kanapickas, and José Exposito for example.
 
 # Posts

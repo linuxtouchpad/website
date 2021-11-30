@@ -13,3 +13,13 @@ Welcome to the Linux Touchpad Dev Guide--a community of builders making the Linu
 ### Discord Chat
 
 You're welcome to join us in our [Discord Chat](https://discord.gg/PYdbNAp5g8) server.
+
+### Posts
+
+<ul>
+  {% for post in site.posts %}
+    <li>
+      <a href="{{ post.url }}">{{ post.title }}</a>
+    </li>
+  {% endfor %}
+</ul>

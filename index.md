@@ -16,10 +16,12 @@ You're welcome to join us in our [Discord Chat](https://discord.gg/PYdbNAp5g8) s
 
 ### Posts
 
-<ul>
+{% link /posts.html %}
+
+<!-- <ul>
   {% for post in site.posts %}
     <li>
       <a href="{{ post.url }}">{{ post.title }}</a>
     </li>
   {% endfor %}
-</ul>
+</ul> -->

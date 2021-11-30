@@ -11,9 +11,17 @@ permalink: /resources/
 - [https://gitlab.freedesktop.org/xorg/xserver](https://gitlab.freedesktop.org/xorg/xserver) - the most well-established graphical environment on Linux
 
 
+## Project Documentation
+
+Some good overview docs:
+
+- [What is libinput?](https://wayland.freedesktop.org/libinput/doc/latest/what-is-libinput.html)
+- [Libinput - touchpads](https://wayland.freedesktop.org/libinput/doc/latest/touchpads.html#touchpads)
+- [Arch Linux - libinput](https://wiki.archlinux.org/title/Libinput)
+
 ## Tools for Visualizing Input Events
 
-- [cleartouch](https://github.com/canadaduane/cleartouch) (Zig, 2021) Visualize /dev/input/event* kernel events in a universal way (works on KDE, Gnome, etc.)
+- [cleartouch](https://github.com/canadaduane/cleartouch) (Zig, 2021) Visualize /dev/input/event* kernel events via GL (works on KDE, Gnome, etc.)
 <div style="text-align:center">
     <iframe width="280" height="157" src="https://www.youtube.com/embed/Cpn_lILPhEM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
@@ -21,9 +29,11 @@ permalink: /resources/
 - [mtview](https://github.com/whot/mtview) (C, 2010-2016) Visualize /dev/input/event* kernel events with GTK
 - [mtdiag-qt](https://github.com/bentiss/mtdiag-qt) (C++, 2012-2017) Visualize and diagnose kernel multitouch events
 
+
 ## Blogs
 
 - [who-t](https://who-t.blogspot.com/) Peter Hutterer's tech blog, focused mainly on libinput and related development over the years
+
 
 ## Presentations
 

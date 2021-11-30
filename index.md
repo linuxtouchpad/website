@@ -1,6 +1,10 @@
-## Linux Touchpad
+## The Linux Touchpad Dev Guide
 
-A community of software developers making the Linux touchpad experience awesome.
+Have you wished your touchpad experience on Linux could be as awesome as Mac OS?
+
+Are you a software developer or Linux enthusiast looking for touchpad hacking resources, or considering whether its worth your time to help out?
+
+Welcome to the Linux Touchpad Dev Guide--a community of builders making the Linux touchpad experience awesome.
 
 ### Discussion Forum
 

@@ -1,0 +1,10 @@
+.img-centered {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.img-medium img {
+  max-width: 300px;
+}

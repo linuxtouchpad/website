@@ -8,19 +8,24 @@ permalink: /docs/
 
 Touchpad input takes a long journey from physical finger movements to the application layer:
 
+<div class="img-centered img-medium">
+    <img src="/assets/images/touchpad-stack.png">
+</div>
+
 1. Finger movements affect capacitive touch circuitry
-2. Firmware
-3. Linux kernel (hid, hid-multitouch)
-4. /dev/input/event* Multitouch Events
-5. libinput
-6. Xserver / Wayland
-7. Gesture detection (Touchegg, libinput-gestures, fusuma, gebaar)
+2. Firmware embedded in the device at the time of manufacture interprets electrical signals
+3. The linux kernel combines hardware-specific custom drivers and general Human Interface Device drivers ([hid](https://github.com/torvalds/linux/tree/master/drivers/hid), [hid-multitouch](https://github.com/torvalds/linux/blob/master/drivers/hid/hid-multitouch.c))
+4. `/dev/input/event*` `ABS_MT_*` [multitouch events](https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h) are emitted by the kernel
+5. [libinput](https://gitlab.freedesktop.org/libinput/libinput) consolidates various touchpad input styles and normalizes DPI, position, and other measurements
+6. Xserver / Wayland employ a "driver" such as [xf86-input-libinput](https://gitlab.freedesktop.org/xorg/driver/xf86-input-libinput) to effectively mirror what `libinput` produces
+7. Gesture detection (e.g. [Touchégg](https://github.com/JoseExposito/touchegg), [libinput-gestures](https://github.com/bulletmark/libinput-gestures), [fusuma](https://github.com/iberianpig/fusuma), [gebaar](https://github.com/Coffee2CodeNL/gebaar-libinput)) matches patterns and emits key or other button events
 8. Application responds to touch events (position, tap, scroll, gestures etc.)
 
-For most touchpad hackers, the 2 most important layers are "kernel" and "libinput":
+For most touchpad hackers, the 3 most important layers are "kernel", "libinput", and "application":
 
 - The `kernel` must be aware of and compatible with the touchpad hardware & firmware. If your touchpad is not working at all and it's a new model, perhaps you'll need to work at the kernel level.
 - The `libinput` layer is the userland layer that unifies all of the differences in capabilities, DPI, and quirks so that subsequent layers don't need to know about particular hardware. If your touchpad is "working" but you're experiencing some annoyance with regard to reliable heuristics, it's likely at the `libinput` level that you'd like to focus your attention.
+- The `application` need only concern itself with wrapped events, e.g. GTK or QT library events.
 
 ## Finding Your Touchpad Device
 

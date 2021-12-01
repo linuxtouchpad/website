@@ -1,7 +1,4 @@
 ---
-# Feel free to add content and custom Front Matter to this file.
-# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-
 layout: home
 ---
 
@@ -19,7 +16,7 @@ If you've ever been frustrated with the touchpad experience on Linux and subsequ
 
 Donate to the <a href="https://github.com/sponsors/gitclear">Linux Touchpad Like a MacBook Pro</a> fund. More than 120 people are chipping in monthly to hire community-sponsored engineers to methodically improve the software stack.
 
-If you're a software engineer with experience in C, C++ or another systems language like Zig or Rust, come talk to us on the <a href="{{ site.ltp.forum_url }}">forum</a> or in <a href="{{ site.ltp.discord_url }}">Discord chat</a>. We'd love to hear about your interests and see if we can match you with new or existing efforts.
+If you're a software engineer with experience in C, C++ or another systems language like Zig or Rust, come talk to us on the <a href="{{ site.ltp.forum_url }}">forum</a> or in <a href="{{ site.ltp.discord_url }}">Discord chat</a>. We'd love to hear about your passion project or touchpad quirk that you're interested in fixing.
 
 ## Who are some of the key people?
 

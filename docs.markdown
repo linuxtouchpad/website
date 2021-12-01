@@ -8,18 +8,23 @@ permalink: /docs/
 
 Touchpad input takes a long journey from physical finger movements to the application layer:
 
-<div class="img-centered img-medium">
+<div class="img-centered img-large">
     <img src="/assets/images/touchpad-stack.png">
 </div>
 
-1. Finger movements affect capacitive touch circuitry
-2. Firmware embedded in the device at the time of manufacture interprets electrical signals
+1. Finger movements affect capacitive touch circuitry.
+2. Firmware embedded in the device at the time of manufacture interprets electrical signals.
 3. The linux kernel combines hardware-specific custom drivers and general Human Interface Device drivers ([hid](https://github.com/torvalds/linux/tree/master/drivers/hid), [hid-multitouch](https://github.com/torvalds/linux/blob/master/drivers/hid/hid-multitouch.c))
-4. `/dev/input/event*` `ABS_MT_*` [multitouch events](https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h) are emitted by the kernel
-5. [libinput](https://gitlab.freedesktop.org/libinput/libinput) consolidates various touchpad input styles and normalizes DPI, position, and other measurements
-6. Xserver / Wayland employ a "driver" such as [xf86-input-libinput](https://gitlab.freedesktop.org/xorg/driver/xf86-input-libinput) to effectively mirror what `libinput` produces
-7. Gesture detection (e.g. [Touchégg](https://github.com/JoseExposito/touchegg), [libinput-gestures](https://github.com/bulletmark/libinput-gestures), [fusuma](https://github.com/iberianpig/fusuma), [gebaar](https://github.com/Coffee2CodeNL/gebaar-libinput)) matches patterns and emits key or other button events
-8. Application responds to touch events (position, tap, scroll, gestures etc.)
+4. `ABS_MT_*` [multitouch events](https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h) are emitted by the kernel and made available to userspace via one of the `/dev/input/event*` file descriptors. Older touchpads may emit relative touch events or multitouch events without contact tracking.
+5. [libinput](https://gitlab.freedesktop.org/libinput/libinput) normalizes DPI, converts absolute position to relative (mouse pointer) position, handles device-specific quirks, and detects gestures such as two-finger scrolling and others. [mtdev](http://bitmath.org/code/mtdev/) is also empoyed to convert to "slotted" contact tracking events.
+6. The Wayland compositor listens direction to libinput and fulfills all parts of the device and gesture stack.
+
+    (a) Gesture remappers (e.g. [Touchégg](https://github.com/JoseExposito/touchegg), [libinput-gestures](https://github.com/bulletmark/libinput-gestures), [fusuma](https://github.com/iberianpig/fusuma), [gebaar](https://github.com/Coffee2CodeNL/gebaar-libinput)) accept gesture events from libinput and custom emit key, button, or position events.
+
+    (b) Xserver employs a "driver" such as [xf86-input-libinput](https://gitlab.freedesktop.org/xorg/driver/xf86-input-libinput) to effectively mirror what `libinput` produces. Xserver used to have many device drivers for input, but libinput has consolidated them and there is usually no need for them any more.
+
+    (c) Xserver interprets and re-emits events.
+7. Application responds to touch events (position, tap, scroll, gestures etc.)
 
 For most touchpad hackers, the 3 most important layers are "kernel", "libinput", and "application":
 

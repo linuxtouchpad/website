@@ -1,0 +1,14 @@
+.img-centered {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.img-medium img {
+  max-width: 300px;
+}
+
+.img-large img {
+  max-width: 450px;
+}

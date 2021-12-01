@@ -15,9 +15,12 @@ permalink: /resources/
 
 Some good overview docs:
 
-- [What is libinput?](https://wayland.freedesktop.org/libinput/doc/latest/what-is-libinput.html)
-- [Libinput - touchpads](https://wayland.freedesktop.org/libinput/doc/latest/touchpads.html#touchpads)
-- [Arch Linux - libinput](https://wiki.archlinux.org/title/Libinput)
+- [What is libinput?](https://wayland.freedesktop.org/libinput/doc/latest/what-is-libinput.html) (libinput docs)
+- [libinput - touchpads](https://wayland.freedesktop.org/libinput/doc/latest/touchpads.html#touchpads) (libinput docs)
+
+Help is also available for end users:
+
+- [Arch Linux - libinput](https://wiki.archlinux.org/title/Libinput) (troubleshooting & customization)
 
 ## Tools for Visualizing Input Events
 

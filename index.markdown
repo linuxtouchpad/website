@@ -3,7 +3,7 @@ layout: home
 ---
 
 <div style="background-color: #e2e2e2; text-align: center;">
-  <img src="{{ '/assets/logo-transparent.png' }}" width="230">
+  <img src="{{ '/assets/images/logo-transparent.png' }}" width="230">
 </div>
 
 <p></p>

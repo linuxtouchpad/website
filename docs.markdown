@@ -69,7 +69,144 @@ To see what `libinput` settings are enabled and disabled for your touchpad, e.g.
         libinput Tapping Drag Lock Enabled (320):	0
         [...snip...]
 
+### Hardware-reported Capabilities: Report Descriptors
 
+Each HID device has a hardware "report descriptor" that is sent from the device itself to the kernel to describe its capabilities. The data is stored in a binary format called a *HID report descriptor*.
+
+Find your device's `report_descriptor` file, and then dump as hex:
+
+```
+cat /sys/devices/pci0000\:00/0000\:00\:15.3/\
+    i2c_designware.2/i2c-12/i2c-PIXA3854\:00/0018\:093A\:0274.0002\
+    /report_descriptor \
+| hexdump -e '16/1 "%02x " "\n"'
+
+05 01 09 02 a1 01 85 02 05 01 09 01 a1 00 05 09
+19 01 29 02 15 00 25 01 75 01 95 02 81 02 05 0d
+[...snip...]
+```
+
+Copy-paste the entire hex byte sequence to [Frank's USB Descriptor and Request Parser](http://eleccelerator.com/usbdescreqparser/). Click "USB HID Report Descriptor" and you'll get output something like this:
+
+```
+[...snip mouse collection...]
+0x05, 0x0D,        // Usage Page (Digitizer)
+0x09, 0x05,        // Usage (Touch Pad)
+0xA1, 0x01,        // Collection (Application)
+0x85, 0x01,        //   Report ID (1)
+0x05, 0x0D,        //   Usage Page (Digitizer)
+0x09, 0x22,        //   Usage (Finger)
+0xA1, 0x02,        //   Collection (Logical)
+0x09, 0x47,        //     Usage (0x47)
+0x09, 0x42,        //     Usage (Tip Switch)
+0x15, 0x00,        //     Logical Minimum (0)
+0x25, 0x01,        //     Logical Maximum (1)
+0x75, 0x01,        //     Report Size (1)
+0x95, 0x02,        //     Report Count (2)
+0x81, 0x02,        //     Input (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)
+0x95, 0x06,        //     Report Count (6)
+0x81, 0x03,        //     Input (Const,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)
+0x09, 0x51,        //     Usage (0x51)
+0x25, 0x0F,        //     Logical Maximum (15)
+0x75, 0x08,        //     Report Size (8)
+0x95, 0x01,        //     Report Count (1)
+0x81, 0x02,        //     Input (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)
+0x05, 0x01,        //     Usage Page (Generic Desktop Ctrls)
+0x09, 0x30,        //     Usage (X)
+0x75, 0x10,        //     Report Size (16)
+0x55, 0x0E,        //     Unit Exponent (-2)
+0x65, 0x11,        //     Unit (System: SI Linear, Length: Centimeter)
+0x35, 0x00,        //     Physical Minimum (0)
+0x46, 0x5A, 0x04,  //     Physical Maximum (1114)
+0x27, 0x39, 0x05, 0x00, 0x00,  //     Logical Maximum (1336)
+0x81, 0x02,        //     Input (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)
+0x09, 0x31,        //     Usage (Y)
+0x46, 0xDA, 0x02,  //     Physical Maximum (730)
+0x27, 0x6C, 0x03, 0x00, 0x00,  //     Logical Maximum (875)
+0x81, 0x02,        //     Input (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)
+0xC0,              //   End Collection
+0x05, 0x0D,        //   Usage Page (Digitizer)
+0x09, 0x22,        //   Usage (Finger)
+0xA1, 0x02,        //   Collection (Logical)
+0x09, 0x47,        //     Usage (0x47)
+0x09, 0x42,        //     Usage (Tip Switch)
+[...snip additional finger collections...]
+```
+
+### Kernel-reported Capabilities
+
+While the hardware may report one thing, the kernel may report another, depending on the compatibility and state of the driver. Here is a method to inspect what the kernel is saying the device is capable of.
+
+```
+# Note: `cat *` would work, but we want to see the filenames next to their
+# contents, so we use `tail -n +1`. We cd to the capabilities dir so that 
+# filenames aren't so long:
+
+$ (cd /sys/devices/pci0000\:00/0000\:00\:15.3/\
+    i2c_designware.2/i2c-12/i2c-PIXA3854\:00/0018\:093A\:0274.0002/\
+    input/input10/capabilities/;
+  tail -n +1 *)
+
+==> abs <==
+2e0800000000003
+
+==> ev <==
+1b
+
+==> ff <==
+0
+
+==> key <==
+e520 30000 0 0 0 0
+
+==> led <==
+0
+
+==> msc <==
+20
+
+==> rel <==
+0
+
+==> snd <==
+0
+
+==> sw <==
+0
+```
+
+The above files and their numeric contents represent HID "capability bits". The Linux Humain Interface Devices spec has several categories of devices that correspond to the short names above. See the [kernel.org input event-codes documentation](https://www.kernel.org/doc/html/latest/input/event-codes.html#event-types).
+
+For our touchpad hacking purposes, we're mostly interested in the non-zero capabilities:
+
+- abs: ABS_ prefix, indicates a device capable of sending absolute coordinates (like a touchpad!)
+- ev: EV_ prefix, indicates a device capable of sending generic events
+- key: KEY_ prefix, indicates a device capable of sending key events (key down, key up, key repeat).
+- msc: MSC_ prefix, indicates a device capable of sending "misc" events, such as MSC_TIMESTAMP (a piece of information that can be sent as a kind of heartbeat, as in the case of fingers not moving but still touching the touchpad--for example when two fingers are touching but not moving it can be a signal that means "put on the brakes" for inertial scrolling).
+
+How do you decode the exact capability bits in each non-zero category of HID input even types? See this [stackexchange contribution](https://unix.stackexchange.com/questions/74903/explain-ev-in-proc-bus-input-devices-data/74907#74907) by [Runium](https://unix.stackexchange.com/users/28489/runium).
+
+In my case, the above bits work out to:
+
+```
+ev: 1b
+   7654 3210
+   0001 1011
+   Set Bits: 0, 1, 3, 4 => EV_SYN, EV_KEY, EV_ABS, EV_MSC
+
+key: e520 30000 0 0 0 0
+   #TODO: work out which keys/buttons this represents
+ 
+abs: 2e0800000000003
+   0010 1110 0000 1000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0011
+   Set Bits: 0, 1, 47, 53, 54, 55, 57
+   => ABS_X, ABS_Y, ABS_MT_SLOT, ABS_MT_POSITION_X, ABS_MT_POSITION_Y, ABS_MT_TOOL_TYPE, ABS_MT_TRACKING_ID
+
+msc: 20
+   0010 0000
+   Set Bits: 5
+   => MSC_TIMESTAMP
+```
 
 ## Quick Hack Steps on Debian/Ubuntu
 

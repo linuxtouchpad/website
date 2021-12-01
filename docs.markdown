@@ -17,7 +17,7 @@ Touchpad input takes a long journey from physical finger movements to the applic
 3. The linux kernel combines hardware-specific custom drivers and general Human Interface Device drivers ([hid](https://github.com/torvalds/linux/tree/master/drivers/hid), [hid-multitouch](https://github.com/torvalds/linux/blob/master/drivers/hid/hid-multitouch.c))
 4. `ABS_MT_*` [multitouch events](https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h) are emitted by the kernel and made available to userspace via one of the `/dev/input/event*` file descriptors. Older touchpads may emit relative touch events or multitouch events without contact tracking.
 5. [libinput](https://gitlab.freedesktop.org/libinput/libinput) normalizes DPI, converts absolute position to relative (mouse pointer) position, handles device-specific quirks, and detects gestures such as two-finger scrolling and others. [mtdev](http://bitmath.org/code/mtdev/) is also empoyed to convert to "slotted" contact tracking events.
-6. The Wayland compositor listens direction to libinput and fulfills all parts of the device and gesture stack.
+6. The Wayland compositor listens directly to libinput and fulfills all parts of the device and gesture stack.
 
     (a) Gesture remappers (e.g. [Touchégg](https://github.com/JoseExposito/touchegg), [libinput-gestures](https://github.com/bulletmark/libinput-gestures), [fusuma](https://github.com/iberianpig/fusuma), [gebaar](https://github.com/Coffee2CodeNL/gebaar-libinput)) accept gesture events from libinput and custom emit key, button, or position events.
 

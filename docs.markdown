@@ -68,7 +68,7 @@ E: DEVLINKS=/dev/input/by-path\
 
 The `DEVNAME` property above shows `/dev/input/event8` as the touchpad device.
 
-You can also see what kernel module(s) may be involved in making this touchpad device work. Using `ls` (or `exa`), find the major, minor numbers of the device:
+You can also see what kernel module(s) may be involved in making this touchpad device work. The "MAJOR" and "MINOR" properties above map to 13, 72. Or, using `ls` (or `exa`), you can aslo see the major, minor numbers of the device:
 
 ```
 $ ls -l /dev/input/event8

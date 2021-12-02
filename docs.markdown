@@ -36,7 +36,59 @@ For most touchpad hackers, the 3 most important layers are "kernel", "libinput",
 
 ### Kernel
 
-    $ lsmod | grep touch
+The kernel uses its `udev` database system to track attributes and properties of various devices as they are initialized or added/removed.
+
+```
+$ find /dev/input/event* -maxdepth 1 \
+  | sudo xargs udevadm info \
+  | grep -20 -i touchpad
+
+P: /devices/pci0000:00/0000:00:15.3/i2c_designware.2/i2c-12/i2c-PIXA3854:00/0018:093A:0274.0002/input/input10/event8
+N: input/event8
+L: 0
+S: input/by-path/pci-0000:00:15.3-platform-i2c_designware.2-event-mouse
+E: DEVPATH=/devices/pci0000:00/0000:00:15.3/i2c_designware.2/i2c-12/i2c-PIXA3854:00/0018:093A:0274.0002/input/input10/event8
+E: DEVNAME=/dev/input/event8
+E: MAJOR=13
+E: MINOR=72
+E: SUBSYSTEM=input
+E: USEC_INITIALIZED=4797212
+E: ID_INPUT=1
+E: ID_INPUT_TOUCHPAD=1
+E: ID_INPUT_WIDTH_MM=111
+E: ID_INPUT_HEIGHT_MM=73
+E: ID_SERIAL=noserial
+E: ID_PATH=pci-0000:00:15.3-platform-i2c_designware.2
+E: ID_PATH_TAG=pci-0000_00_15_3-platform-i2c_designware_2
+E: LIBINPUT_DEVICE_GROUP=18/93a/274:i2c-PIXA3854:00
+E: DEVLINKS=/dev/input/by-path/pci-0000:00:15.3-platform-i2c_designware.2-event-mouse
+```
+
+The `DEVNAME` property above shows `/dev/input/event8` as the touchpad device.
+
+You can also see what kernel module(s) may be involved in making this touchpad device work. Using `ls` (or `exa`), find the major, minor numbers of the device:
+
+```
+$ ls -l /dev/input/event8
+crw-rw---- 1 root input 13, 72 Nov 28 10:42 /dev/input/event8
+```
+
+The `input 13, 72` tells us this is an input device (i.e. character device, not a block device) with major number 13 and minor number 72. These can be found in the `/sys/dev/char` (character) directory:
+
+```
+$ ls /sys/dev/char/13\:72/
+dev        device/    power/     subsystem/ uevent 
+```
+
+Another tool you can use to find what's driving your device at the kernel level is `lsmod`:
+
+```
+$ lsmod | grep touch
+hid_multitouch         28672  0
+hid                   139264  6 i2c_hid,usbhid,hid_multitouch,hid_sensor_hub,intel_ishtp_hid,hid_generic
+```
+
+The comma-separated list indicates what modules *depend on* this module. So `hid_multitouch` depends on `hid`.
 
 ### Xorg
 

@@ -215,7 +215,7 @@ If you're on a Debian-based system like Ubuntu, you can quite easily modify libi
     sudo apt build-dep libinput
     sudo apt install fakeroot
     apt source libinput
-    cd libinput-1.12.6/
+    cd libinput-1.19.2/
     # edit code! e.g. `vim src/evdev-mt-touchpad.c`
     dpkg-buildpackage -b
     sudo dpkg -i -O ../libinput*.deb

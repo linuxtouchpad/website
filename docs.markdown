@@ -47,7 +47,8 @@ P: /devices/pci0000:00/0000:00:15.3/i2c_designware.2/i2c-12/i2c-PIXA3854:00/0018
 N: input/event8
 L: 0
 S: input/by-path/pci-0000:00:15.3-platform-i2c_designware.2-event-mouse
-E: DEVPATH=/devices/pci0000:00/0000:00:15.3/i2c_designware.2/i2c-12/i2c-PIXA3854:00/0018:093A:0274.0002/input/input10/event8
+E: DEVPATH=/devices/pci0000:00/0000:00:15.3/i2c_designware.2/i2c-12\
+     /i2c-PIXA3854:00/0018:093A:0274.0002/input/input10/event8
 E: DEVNAME=/dev/input/event8
 E: MAJOR=13
 E: MINOR=72
@@ -61,7 +62,8 @@ E: ID_SERIAL=noserial
 E: ID_PATH=pci-0000:00:15.3-platform-i2c_designware.2
 E: ID_PATH_TAG=pci-0000_00_15_3-platform-i2c_designware_2
 E: LIBINPUT_DEVICE_GROUP=18/93a/274:i2c-PIXA3854:00
-E: DEVLINKS=/dev/input/by-path/pci-0000:00:15.3-platform-i2c_designware.2-event-mouse
+E: DEVLINKS=/dev/input/by-path\
+     /pci-0000:00:15.3-platform-i2c_designware.2-event-mouse
 ```
 
 The `DEVNAME` property above shows `/dev/input/event8` as the touchpad device.
@@ -78,6 +80,15 @@ The `input 13, 72` tells us this is an input device (i.e. character device, not 
 ```
 $ ls /sys/dev/char/13\:72/
 dev        device/    power/     subsystem/ uevent 
+```
+
+Within the `device/` folder, you should be able to see what kernel module is driving:
+
+```
+$ ls -l /sys/dev/char/13\:72/device/device/driver
+lrwxrwxrwx 1 root root 0 Dec  2 09:28 \
+  /sys/dev/char/13:72/device/device/driver -> \
+  ../../../../../../../bus/hid/drivers/hid-multitouch
 ```
 
 Another tool you can use to find what's driving your device at the kernel level is `lsmod`:

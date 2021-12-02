@@ -91,6 +91,8 @@ lrwxrwxrwx 1 root root 0 Dec  2 09:28 \
   ../../../../../../../bus/hid/drivers/hid-multitouch
 ```
 
+More info can be found at [How to find the driver associated with a device on Linux](https://unix.stackexchange.com/questions/97676/how-to-find-the-driver-module-associated-with-a-device-on-linux).
+
 Another tool you can use to find what's driving your device at the kernel level is `lsmod`:
 
 ```

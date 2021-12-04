@@ -22,15 +22,22 @@ Help is also available for end users:
 
 - [Arch Linux - libinput](https://wiki.archlinux.org/title/Libinput) (troubleshooting & customization)
 
-## Tools for Visualizing Input Events
+## Tools
 
-- [cleartouch](https://github.com/canadaduane/cleartouch) (Zig, 2021) Visualize /dev/input/event* kernel events via GL (works on KDE, Gnome, etc.)
+- [evemu](https://gitlab.freedesktop.org/libevdev/evemu) (C, Python)
+  - Record input events and play them back on a virtual device
+
+- [cleartouch](https://github.com/canadaduane/cleartouch) (Zig, 2021)
+  - Visualize /dev/input/event* kernel events via GL (works on KDE, Gnome, etc.)
 <div style="text-align:center">
     <iframe width="280" height="157" src="https://www.youtube.com/embed/Cpn_lILPhEM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 
-- [mtview](https://github.com/whot/mtview) (C, 2010-2016) Visualize /dev/input/event* kernel events with GTK
-- [mtdiag-qt](https://github.com/bentiss/mtdiag-qt) (C++, 2012-2017) Visualize and diagnose kernel multitouch events
+- [mtview](https://github.com/whot/mtview) (C, 2010-2016)
+  - Visualize /dev/input/event* kernel events with GTK
+
+- [mtdiag-qt](https://github.com/bentiss/mtdiag-qt) (C++, 2012-2017)
+  - Visualize and diagnose kernel multitouch events
 
 
 ## Blogs

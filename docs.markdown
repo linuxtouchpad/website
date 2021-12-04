@@ -13,18 +13,19 @@ Touchpad input takes a long journey from physical finger movements to the applic
 </div>
 
 1. Finger movements affect capacitive touch circuitry.
-2. Firmware embedded in the device at the time of manufacture interprets electrical signals.
-3. The linux kernel combines hardware-specific custom drivers and general Human Interface Device drivers ([hid](https://github.com/torvalds/linux/tree/master/drivers/hid), [hid-multitouch](https://github.com/torvalds/linux/blob/master/drivers/hid/hid-multitouch.c))
-4. `ABS_MT_*` [multitouch events](https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h) are emitted by the kernel and made available to userspace via one of the `/dev/input/event*` file descriptors. Older touchpads may emit relative touch events or multitouch events without contact tracking.
-5. [libinput](https://gitlab.freedesktop.org/libinput/libinput) normalizes DPI, converts absolute position to relative (mouse pointer) position, handles device-specific quirks, and detects gestures such as two-finger scrolling and others. [mtdev](http://bitmath.org/code/mtdev/) is also empoyed to convert to "slotted" contact tracking events.
-6. The Wayland compositor listens directly to libinput and fulfills all parts of the device and gesture stack.
+2. Firmware embedded in the device at the time of manufacture interprets electrical signals. Some convey proximity, pressure, orientation, or simply absolute X/Y coordinates of fingers. A modern specification for touchpad firmware<->OS integration is the [Windows Precision Touchpad](https://docs.microsoft.com/en-us/windows-hardware/design/component-guidelines/windows-precision-touchpad-implementation-guide) guide.
+3. The linux kernel combines hardware-specific custom drivers and general Human Interface Device drivers ([hid](https://github.com/torvalds/linux/tree/master/drivers/hid), [hid-multitouch](https://github.com/torvalds/linux/blob/master/drivers/hid/hid-multitouch.c)) to provide stream of data that is in relative or absolute coordinates (usually absolute), and context-free or slotted (usually slotted, meaning each "finger" corresponds to a data slot).
+4. All touchpad events, including `ABS_MT_*` [multitouch events](https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h) are emitted by the kernel and made available to userspace via one of the `/dev/input/event*` file descriptors. Older touchpads may emit relative touch events or multitouch events without contact tracking.
+5. Gesture remappers take `libinput` events such as gestures as input, and remap them to user-defined or desktop environment norms. Their output is then looped back into `libinput` at the next layer as well. Sometimes gesture remappers also extend into the User Interface domain by providing customization GUIs or showing graphics and animations (but not always).
+6. The Linux graphical desktop world is currently divided into X.Org and Wayland, with the former being the "stable classic" and the latter being the "eventual replacement" for X.  That said, both systems now depend on `libinput` as part of their stack (see #8 below).
 
     (a) Gesture remappers (e.g. [Touchégg](https://github.com/JoseExposito/touchegg), [libinput-gestures](https://github.com/bulletmark/libinput-gestures), [fusuma](https://github.com/iberianpig/fusuma), [gebaar](https://github.com/Coffee2CodeNL/gebaar-libinput)) accept gesture events from libinput and custom emit key, button, or position events.
 
     (b) Xserver employs a "driver" such as [xf86-input-libinput](https://gitlab.freedesktop.org/xorg/driver/xf86-input-libinput) to effectively mirror what `libinput` produces. Xserver used to have many device drivers for input, but libinput has consolidated them and there is usually no need for them any more.
 
     (c) Xserver interprets and re-emits events.
-7. Application responds to touch events (position, tap, scroll, gestures etc.)
+7. The application responds to touch events (position, tap, scroll, gestures etc.)
+8. Finally we can talk about [libinput](https://gitlab.freedesktop.org/libinput/libinput)! `libinput` is a cornerstone library for the touchpad input stack that can be used by several layers of the stack at any given time. It contains a hardware database to provide physical measurements, normalize DPI, and handle device-specific quirks. In addition, it converts absolute position touchpad coordinates to relative mouse pointer movements, detects gestures such as two-finger scrolling and others, and improves quality of life through palm detection and DWT ("disable [the touchpad] while typing"). [mtdev](http://bitmath.org/code/mtdev/) is also empoyed to convert to "slotted" contact tracking events if needed. Because `libinput`
 
 For most touchpad hackers, the 3 most important layers are "kernel", "libinput", and "application":
 

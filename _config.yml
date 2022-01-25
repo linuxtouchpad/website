@@ -31,7 +31,7 @@ plugins:
   - jekyll-feed
 
 ltp:
-  discord_url: https://discord.com/invite/PYdbNAp5g8
+  discord_url: https://discord.gg/SbtB882McQ
   forum_url: https://github.com/linuxtouchpad/discussion/discussions
 
 # Exclude from processing.

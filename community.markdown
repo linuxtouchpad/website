@@ -11,6 +11,8 @@ There are currently two places where you can gather for chat on Linux touchpad-r
 - IRC: #wayland on oftc
 - Discord: <a href="{{ site.ltp.discord_url }}">invite link</a>
 
+We've had some difficulty with Discord in the past. If you were automatically removed, please try joining the new server.
+
 ## Discussion Forum
 
 While there are severl project-specific issue trackers where some discussion can take place, this discussion area is meant as a place where all aspects of linux touchpad development can be discussed:

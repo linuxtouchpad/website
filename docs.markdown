@@ -39,7 +39,7 @@ For most touchpad hackers, the 3 most important layers are "kernel", "libinput",
 The kernel uses its `udev` database system to track attributes and properties of various devices as they are initialized or added/removed.
 
 ```
-$ find /dev/input/event* -maxdepth 1 \
+$ find /dev/input/ -maxdepth 1 -name 'event*' \
   | sudo xargs udevadm info \
   | grep -20 -i touchpad
 

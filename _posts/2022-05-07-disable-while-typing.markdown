@@ -9,7 +9,7 @@ One of the more annoying things about typing with a large touchpad on a laptop, 
 
 Unfortunately, the Linux experience is not quite optimal yet. Some touchpads are to blame--they may not properly report "palm" events--but there may also be some improvements to be made on the software stack (TBD).
 
-In the meantime, there is a fairly simple "hack" called DWT ("Disable While Typing") that has been built by the libinput team that allows you to "disable" the touchpad while you are typing. See the [libinput docs](https://wayland.freedesktop.org/libinput/doc/latest/palm-detection.html#disable-while-typing).
+In the meantime, there is a fairly simple "hack" called DWT ("Disable While Typing") that has been built by the [libinput](https://gitlab.freedesktop.org/libinput/libinput) team that allows you to "disable" the touchpad while you are typing. See the [libinput docs](https://wayland.freedesktop.org/libinput/doc/latest/palm-detection.html#disable-while-typing).
 
 Note: DWT works well in most cases, but fails for things like gaming where you want to be able to use the touchpad while controlling a character (for example), or web apps like Miro that require you to hold the spacebar while moving the canvas around with the pointer (touchpad).
 
